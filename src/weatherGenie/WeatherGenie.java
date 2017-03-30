@@ -32,6 +32,14 @@ public class WeatherGenie extends JFrame {
 	private JPanel contentPane;
 	private JTextField searchString;
 	private HashMap<String, OpenWeatherData> queryHistory= new HashMap<>();
+	private JLabel txtLocation;
+	private JLabel txtConditions;
+	private JLabel txtCurrTemp;
+	private JLabel txtMinTemp;
+	private JLabel txtMaxTemp;
+	private JLabel txtWindSpeed;
+	private JLabel txtWindDir;
+	private JLabel txtError;
 
 	/**
 	 * Launch the application.
@@ -93,7 +101,7 @@ public class WeatherGenie extends JFrame {
 		lblLocation.setBounds(40, 128, 73, 14);
 		contentPane.add(lblLocation);
 		
-		JLabel txtLocation = new JLabel("");
+		txtLocation = new JLabel("");
 		txtLocation.setBounds(119, 128, 204, 14);
 		contentPane.add(txtLocation);
 		
@@ -102,7 +110,7 @@ public class WeatherGenie extends JFrame {
 		lblConditons.setBounds(50, 156, 63, 14);
 		contentPane.add(lblConditons);
 		
-		JLabel txtConditions = new JLabel("");
+		txtConditions = new JLabel("");
 		txtConditions.setBounds(117, 156, 131, 14);
 		contentPane.add(txtConditions);
 		
@@ -111,7 +119,7 @@ public class WeatherGenie extends JFrame {
 		lblTempsCurr.setBounds(40, 185, 73, 14);
 		contentPane.add(lblTempsCurr);
 		
-		JLabel txtCurrTemp = new JLabel("");
+		txtCurrTemp = new JLabel("");
 		txtCurrTemp.setBounds(118, 185, 36, 14);
 		contentPane.add(txtCurrTemp);
 		
@@ -120,11 +128,11 @@ public class WeatherGenie extends JFrame {
 		lblMinMax.setBounds(164, 185, 63, 14);
 		contentPane.add(lblMinMax);
 		
-		JLabel txtMinTemp = new JLabel("");
+		txtMinTemp = new JLabel("");
 		txtMinTemp.setBounds(238, 185, 36, 14);
 		contentPane.add(txtMinTemp);
 		
-		JLabel txtMaxTemp = new JLabel("");
+		txtMaxTemp = new JLabel("");
 		txtMaxTemp.setBounds(280, 185, 36, 14);
 		contentPane.add(txtMaxTemp);
 		
@@ -133,15 +141,15 @@ public class WeatherGenie extends JFrame {
 		lblWindSpeed.setBounds(10, 210, 94, 14);
 		contentPane.add(lblWindSpeed);
 		
-		JLabel txtWindSpeed = new JLabel("");
+		txtWindSpeed = new JLabel("");
 		txtWindSpeed.setBounds(122, 210, 36, 14);
 		contentPane.add(txtWindSpeed);
 		
-		JLabel txtWindDir = new JLabel("");
+		txtWindDir = new JLabel("");
 		txtWindDir.setBounds(164, 210, 110, 14);
 		contentPane.add(txtWindDir);
 		
-		JLabel txtError = new JLabel("");
+		txtError = new JLabel("");
 		txtError.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 11));
 		txtError.setForeground(Color.RED);
 		txtError.setBounds(40, 236, 278, 14);
@@ -152,10 +160,41 @@ public class WeatherGenie extends JFrame {
 		contentPane.add(btnQuery);
 		btnQuery.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO Add actual query
+				clearAllDataFields();
+				
+				OpenWeatherData data = new GetWeatherData().getWeatherData(searchString.getText());
+				
+				if (data.isWebServiceCallSuccess()) {
+					// TODO Check and Save history
+					
+					// Set fields on display
+					txtError.setText(data.getWebServiceCallMessage());
+					txtConditions.setText(data.getDescription());
+					txtCurrTemp.setText(Integer.toString(data.getTempInDegreesFarenheit(data.getTemp())));
+					
+				} else {
+					// Failed to get proper data. Just display the error message for the user.
+					txtError.setText(data.getWebServiceCallMessage());
+				}
+				
 			}
 		});
+		
 
+	}
+	/**
+	 * Clears the display locations on the screen.
+	 */
+	private void clearAllDataFields() {
+		String empty = "";
+		txtError.setText(empty);
+		txtConditions.setText(empty);
+		txtCurrTemp.setText(empty);
+		txtLocation.setText(empty);
+		txtMaxTemp.setText(empty);
+		txtMinTemp.setText(empty);
+		txtWindDir.setText(empty);
+		txtWindSpeed.setText(empty);		
 	}
 	
 }

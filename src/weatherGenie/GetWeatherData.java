@@ -35,6 +35,7 @@ public class GetWeatherData {
 		if (query == null || query.trim().isEmpty()){
 			// set the error message
 			weatherData.setWebServiceCallMessage("You did not enter a search string");
+			weatherData.setSearchSuccess(false);
 			return weatherData;
 		}
 		
