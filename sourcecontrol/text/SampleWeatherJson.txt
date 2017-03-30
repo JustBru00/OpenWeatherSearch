@@ -1,0 +1,28 @@
+
+{
+"coord":{"lon":-76.35,"lat":40.1},
+"weather":
+  [
+    {"id":800,"main":"Clear","description":"clear sky","icon":"01d"}
+  ],
+"base":"stations",
+"main":{
+  "temp":268.52,
+  "pressure":1018,
+  "humidity":53,
+  "temp_min":266.15,
+  "temp_max":270.15},
+  "visibility":16093,
+  "wind":
+    {"speed":5.1,"deg":280},
+  "clouds":{"all":1},
+  "dt":1489667700,
+  "sys":{"type":1,
+  "id":2340,
+  "message":0.0044,
+  "country":"US",
+  "sunrise":1489662840,
+  "sunset":1489706047},
+"id":5188022,
+"name":"East Petersburg",
+"cod":200}
