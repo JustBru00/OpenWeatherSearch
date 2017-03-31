@@ -4,6 +4,7 @@
 package beans;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 /**
  * @author read
@@ -17,7 +18,8 @@ public class OpenWeatherData {
 	 *
 	 */
 	public OpenWeatherData(){
-		
+		// Set the created time in constructor
+				this.timeCreated = Instant.now();
 	}
 
 	/**
@@ -54,7 +56,14 @@ public class OpenWeatherData {
 		this.tempMax = tempMax;
 		this.visibility = visibility;
 		this.country = country;
+		// Set the created time in constructor
+		this.timeCreated = Instant.now();
 	}
+	/**
+	 * @author Justin Brubaker
+	 * Stores the time this data was created for history purging purposes.
+	 */
+	private Instant timeCreated;
 
 	/**
 	 * search string for the weather lookup. Can be a zip code, a city, state, country
@@ -151,7 +160,20 @@ public class OpenWeatherData {
 	 * Getters and setters
 	 * 
 	 */
-	
+	/**
+	 * @author Justin Brubaker
+	 * @return the time that this was created.
+	 */
+	public Instant getTimeCreated() {
+		return timeCreated;
+	}
+	/**
+	 * @author Justin Brubaker
+	 * Sets the creation time to the current system time.
+	 */
+	public void setCreationTime() {
+		timeCreated = Instant.now();
+	}
 	
 	/**
 	 * @return the searchString
