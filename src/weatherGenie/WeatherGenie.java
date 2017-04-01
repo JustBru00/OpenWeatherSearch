@@ -199,7 +199,7 @@ public class WeatherGenie extends JFrame {
 				} else { // If the history has nothing in it. Get the weather
 							// data from webservice
 					data = new GetWeatherData().getWeatherData(searchString.getText());
-					System.out.println("Nothing is history. Getting some new data.");
+					System.out.println("Nothing in history. Getting some new data.");
 				}
 
 				history.put(searchString.getText(), data);
