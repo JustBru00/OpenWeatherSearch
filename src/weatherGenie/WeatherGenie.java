@@ -43,6 +43,8 @@ public class WeatherGenie extends JFrame {
 	private JLabel txtWindSpeed;
 	private JLabel txtWindDir;
 	private JLabel txtError;
+	private JLabel lblFalse;
+	private JButton btnQuery;
 
 	/**
 	 * Launch the application.
@@ -84,6 +86,11 @@ public class WeatherGenie extends JFrame {
 		contentPane.add(lblQuery);
 
 		searchString = new JTextField();
+		searchString.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {				
+				btnQuery.doClick();
+			}
+		});
 		searchString.setBounds(119, 41, 199, 20);
 		contentPane.add(searchString);
 		searchString.setColumns(10);
@@ -94,7 +101,7 @@ public class WeatherGenie extends JFrame {
 				searchString.setText(Reference.favoriteQuery);
 			}
 		});
-		btnFavorite.setBounds(238, 72, 73, 23);
+		btnFavorite.setBounds(238, 72, 81, 23);
 		contentPane.add(btnFavorite);
 
 		JLabel lblLocation = new JLabel("Weather for");
@@ -104,7 +111,7 @@ public class WeatherGenie extends JFrame {
 		contentPane.add(lblLocation);
 
 		txtLocation = new JLabel("");
-		txtLocation.setBounds(119, 128, 204, 14);
+		txtLocation.setBounds(119, 128, 238, 14);
 		contentPane.add(txtLocation);
 
 		JLabel lblConditons = new JLabel("Conditons");
@@ -113,7 +120,7 @@ public class WeatherGenie extends JFrame {
 		contentPane.add(lblConditons);
 
 		txtConditions = new JLabel("");
-		txtConditions.setBounds(117, 156, 131, 14);
+		txtConditions.setBounds(117, 156, 201, 14);
 		contentPane.add(txtConditions);
 
 		JLabel lblTempsCurr = new JLabel("Temps  Curr");
@@ -157,73 +164,93 @@ public class WeatherGenie extends JFrame {
 		txtError.setBounds(40, 236, 278, 14);
 		contentPane.add(txtError);
 
-		JButton btnQuery = new JButton("Query");
+		btnQuery = new JButton("Query");
 		btnQuery.setBounds(129, 72, 79, 23);
 		contentPane.add(btnQuery);
+
+		JLabel lblUsedHistory = new JLabel("Used History? ");
+		lblUsedHistory.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblUsedHistory.setBounds(327, 210, 81, 14);
+		contentPane.add(lblUsedHistory);
+
+		lblFalse = new JLabel("false");
+		lblFalse.setForeground(Color.RED);
+		lblFalse.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 11));
+		lblFalse.setBounds(327, 222, 46, 14);
+		contentPane.add(lblFalse);
 		btnQuery.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Clear the display
-				clearAllDataFields();
-
-				OpenWeatherData data;
-
-				// If we have a query in the history
-				if (history.containsKey(searchString.getText())) {
-					//If it was a success
-					if (history.get(searchString.getText()).isWebServiceCallSuccess()) {
-
-						// The current time for comparasion
-						Instant now = Instant.now();
-
-						// The time that elapsed between the data in history and
-						// the current time
-						Duration timeElapsed = Duration.between(history.get(searchString.getText()).getTimeCreated(),
-								now);
-
-						// the mins that have elapsed
-						long mins = timeElapsed.getSeconds() / 60;
-
-						// If the data is younger than 30 mins
-						if (mins < 30) {
-							data = history.get(searchString.getText());
-							System.out.println("Using data from history");
-						} else {
-							// Otherwise get some new data.
-							data = new GetWeatherData().getWeatherData(searchString.getText());
-							System.out.println("Old data in history. Got new data from web service");
-						}
-					} else { // Call failed. Try again.
-						data = new GetWeatherData().getWeatherData(searchString.getText());
-						System.out.println("The call failed before. Trying again.");
-					}
-				} else { // If the history has nothing in it. Get the weather
-							// data from webservice
-					data = new GetWeatherData().getWeatherData(searchString.getText());
-					System.out.println("Nothing in history. Getting some new data.");
-				}
-
-				history.put(searchString.getText(), data);
-
-				if (data.isWebServiceCallSuccess()) {
-
-					// Set fields on display
-					txtError.setText(data.getWebServiceCallMessage());
-					txtConditions.setText(data.getSummary() + " (" + data.getDescription() + ")");
-					txtCurrTemp.setText(Integer.toString(data.getTempInDegreesFarenheit(data.getTemp())));
-					txtLocation.setText(data.getLocationName() + ", " + data.getCountry());
-					txtMaxTemp.setText(Integer.toString(data.getTempInDegreesFarenheit(data.getTempMax())));
-					txtMinTemp.setText(Integer.toString(data.getTempInDegreesFarenheit(data.getTempMin())));
-					txtWindDir.setText(data.getWindDirText(data.getWinddirection()));
-					txtWindSpeed.setText(Integer.toString(data.getWindSpeed()));
-
-				} else {
-					// Failed to get proper data. Just display the error message
-					// for the user.
-					txtError.setText(data.getWebServiceCallMessage());
-				}
-
+				queryButton();
 			}
 		});
+		
+		
+
+	}
+
+	private void queryButton() {
+		// Clear the display
+		clearAllDataFields();
+
+		OpenWeatherData data;
+
+		// If we have a query in the history
+		if (history.containsKey(searchString.getText())) {
+			// If it was a success
+			if (history.get(searchString.getText()).isWebServiceCallSuccess()) {
+
+				// The current time for comparison
+				Instant now = Instant.now();
+
+				// The time that elapsed between the data in history and
+				// the current time
+				Duration timeElapsed = Duration.between(history.get(searchString.getText()).getTimeCreated(), now);
+
+				// the mins that have elapsed
+				long mins = timeElapsed.getSeconds() / 60;
+
+				// If the data is younger than 30 mins
+				if (mins < 30) {
+					lblFalse.setText("true");
+					data = history.get(searchString.getText());
+					System.out.println("Using data from history");
+				} else {
+					// Otherwise get some new data.
+					lblFalse.setText("false");
+					data = new GetWeatherData().getWeatherData(searchString.getText());
+					System.out.println("Old data in history. Got new data from web service");
+				}
+			} else { // Call failed. Try again.
+				lblFalse.setText("false");
+				data = new GetWeatherData().getWeatherData(searchString.getText());
+				System.out.println("The call failed before. Trying again.");
+			}
+		} else { // If the history has nothing in it. Get the weather
+					// data from webservice
+			lblFalse.setText("false");
+			data = new GetWeatherData().getWeatherData(searchString.getText());
+			System.out.println("Nothing in history. Getting some new data.");
+		}
+
+		history.put(searchString.getText(), data);
+
+		if (data.isWebServiceCallSuccess()) {
+
+			// Set fields on display
+			txtError.setText(data.getWebServiceCallMessage());
+			txtConditions.setText(data.getSummary() + " (" + data.getDescription() + ")");
+			txtCurrTemp.setText(Integer.toString(data.getTempInDegreesFarenheit(data.getTemp())));
+			txtLocation.setText(data.getLocationName() + ", " + data.getCountry());
+			txtMaxTemp.setText(Integer.toString(data.getTempInDegreesFarenheit(data.getTempMax())));
+			txtMinTemp.setText(Integer.toString(data.getTempInDegreesFarenheit(data.getTempMin())));
+			txtWindDir.setText(data.getWindDirText(data.getWinddirection()));
+			txtWindSpeed.setText(Integer.toString(data.getWindSpeed()));
+
+		} else {
+			// Failed to get proper data. Just display the error message
+			// for the user.
+			txtError.setText(data.getWebServiceCallMessage());
+		}
 
 	}
 
@@ -241,5 +268,4 @@ public class WeatherGenie extends JFrame {
 		txtWindDir.setText(empty);
 		txtWindSpeed.setText(empty);
 	}
-
 }
