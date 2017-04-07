@@ -11,15 +11,15 @@ import java.time.Instant;
  *
  */
 public class OpenWeatherData {
-	
+
 	/**
 	 * 
 	 * null constructor
 	 *
 	 */
-	public OpenWeatherData(){
+	public OpenWeatherData() {
 		// Set the created time in constructor
-				this.timeCreated = Instant.now();
+		this.timeCreated = Instant.now();
 	}
 
 	/**
@@ -59,21 +59,61 @@ public class OpenWeatherData {
 		// Set the created time in constructor
 		this.timeCreated = Instant.now();
 	}
+
+	public String getHTML() {
+		String html = "<h1><strong>Current Weather for: WEATHER_LOCATION, COUNTRY</strong></h1><ul><li><strong>Conditions: "
+				+ "SUMMARY (DESCRIPTION)</strong></li><li><strong>Current Temp(F): CURRENT_TEMP | 24 hour min/max temp(F): MIN_TEMP/MAX_TEMP</strong></li><li><strong>Pressure(mb): "
+				+ "PRESSURE</strong></li><li><strong>Wind: WIND_SPEED mph from the WIND_DIR</strong></li></ul><p>&nbsp;</p><h3><em>Data brought to you by the Open Weather Data API</em></h3>";
+		
+		html = html.replace("WEATHER_LOCATION", getLocationName());
+		html = html.replace("COUNTRY", getCountry());
+		html = html.replace("SUMMARY", getSummary());
+		html = html.replace("DESCRIPTION", getDescription());
+		html = html.replace("CURRENT_TEMP", Integer.toString(getTempInDegreesFarenheit(getTemp())));
+		html = html.replace("MIN_TEMP", Integer.toString(getTempInDegreesFarenheit(getTempMin())));
+		html = html.replace("MAX_TEMP", Integer.toString(getTempInDegreesFarenheit(getTempMax())));
+		html = html.replace("PRESSURE", getPressure().toString());
+		html = html.replace("WIND_SPEED", Integer.toString(getWindSpeed()));
+		html = html.replace("WIND_DIR", getWindDirText(getWinddirection()));
+		
+		return html;
+	}
+
+	public String getFormatedWeather() {
+		StringBuilder s = new StringBuilder();
+		s.append("** Current Weather for: " + getLocationName() + ", " + getCountry() + " **");
+		s.append("\n");
+		s.append("   Conditions: " + getSummary() + " (" + getDescription() + ")");
+		s.append("\n");
+		s.append("   Current Temp(F): " + getTempInDegreesFarenheit(getTemp()) + " | 24 hour min/max temp(F): "
+				+ getTempInDegreesFarenheit(getTempMin()) + "/" + getTempInDegreesFarenheit(getTempMax()));
+		s.append("\n");
+		s.append("   Pressure(mb): " + getPressure());
+		s.append("\n");
+		s.append("   Wind: " + getWindSpeed() + " mph from the " + getWindDirText(getWinddirection()));
+		s.append("\n");
+		s.append("\n");
+		s.append("** This data is brought to you by the Open Weather Data API **");
+		return s.toString();
+	}
+
 	/**
-	 * @author Justin Brubaker
-	 * Stores the time this data was created for history purging purposes.
+	 * @author Justin Brubaker Stores the time this data was created for history
+	 *         purging purposes.
 	 */
 	private Instant timeCreated;
 
 	/**
-	 * search string for the weather lookup. Can be a zip code, a city, state, country
+	 * search string for the weather lookup. Can be a zip code, a city, state,
+	 * country
 	 */
 	private String searchString;
-/**
- * result of the search. True means we had a successful web service call, false means a problem
- */
+	/**
+	 * result of the search. True means we had a successful web service call,
+	 * false means a problem
+	 */
 	private Boolean webServiceCallStatus;
-	
+
 	/**
 	 * message for web service call
 	 */
@@ -82,9 +122,9 @@ public class OpenWeatherData {
 	/**
 	 * we are not currently using the location data, latitude and longitude
 	 */
-	/** 
-	 * the following attributes are part of the summary subObject, "weather":, This is an array in the
-	 * json object, but currently only returns one row 
+	/**
+	 * the following attributes are part of the summary subObject, "weather":,
+	 * This is an array in the json object, but currently only returns one row
 	 */
 	/**
 	 * "id":800
@@ -102,15 +142,15 @@ public class OpenWeatherData {
 	 * Weather icon., currently unused "icon":
 	 */
 	private String icon;
-	
+
 	/**
 	 * location "name":"
 	 */
 	private String locationName;
 
 	/**
-	 * The following attributes are part of the subObject "main":
-	 * all temps are returned in degrees kelvin
+	 * The following attributes are part of the subObject "main": all temps are
+	 * returned in degrees kelvin
 	 */
 	/**
 	 * current temp "temp":
@@ -139,12 +179,12 @@ public class OpenWeatherData {
 	/**
 	 * skipping the clouds subObject, and a several other attributes
 	 */
-	
+
 	/**
 	 * country "country":
 	 */
 	private String country;
-	
+
 	/**
 	 * wind speed
 	 */
@@ -153,8 +193,6 @@ public class OpenWeatherData {
 	 * wind direction
 	 */
 	private Integer windDirection;
-	
-
 
 	/**
 	 * Getters and setters
@@ -167,14 +205,15 @@ public class OpenWeatherData {
 	public Instant getTimeCreated() {
 		return timeCreated;
 	}
+
 	/**
-	 * @author Justin Brubaker
-	 * Sets the creation time to the current system time.
+	 * @author Justin Brubaker Sets the creation time to the current system
+	 *         time.
 	 */
 	public void setCreationTime() {
 		timeCreated = Instant.now();
 	}
-	
+
 	/**
 	 * @return the searchString
 	 */
@@ -183,7 +222,8 @@ public class OpenWeatherData {
 	}
 
 	/**
-	 * @param searchString the searchString to set
+	 * @param searchString
+	 *            the searchString to set
 	 */
 	public void setSearchString(String searchString) {
 		this.searchString = searchString;
@@ -197,7 +237,8 @@ public class OpenWeatherData {
 	}
 
 	/**
-	 * @param searchSuccess the searchSuccess to set
+	 * @param searchSuccess
+	 *            the searchSuccess to set
 	 */
 	public void setSearchSuccess(Boolean searchSuccess) {
 		this.webServiceCallStatus = searchSuccess;
@@ -211,7 +252,8 @@ public class OpenWeatherData {
 	}
 
 	/**
-	 * @param weatherId the weatherId to set
+	 * @param weatherId
+	 *            the weatherId to set
 	 */
 	public void setWeatherId(String weatherId) {
 		this.weatherId = weatherId;
@@ -225,7 +267,8 @@ public class OpenWeatherData {
 	}
 
 	/**
-	 * @param summary the summary to set
+	 * @param summary
+	 *            the summary to set
 	 */
 	public void setSummary(String summary) {
 		this.summary = summary;
@@ -239,7 +282,8 @@ public class OpenWeatherData {
 	}
 
 	/**
-	 * @param description the description to set
+	 * @param description
+	 *            the description to set
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -253,7 +297,8 @@ public class OpenWeatherData {
 	}
 
 	/**
-	 * @param icon the icon to set
+	 * @param icon
+	 *            the icon to set
 	 */
 	public void setIcon(String icon) {
 		this.icon = icon;
@@ -267,7 +312,8 @@ public class OpenWeatherData {
 	}
 
 	/**
-	 * @param locationName the locationName to set
+	 * @param locationName
+	 *            the locationName to set
 	 */
 	public void setLocationName(String locationName) {
 		this.locationName = locationName;
@@ -281,7 +327,8 @@ public class OpenWeatherData {
 	}
 
 	/**
-	 * @param temp the temp to set
+	 * @param temp
+	 *            the temp to set
 	 */
 	public void setTemp(BigDecimal temp) {
 		this.temp = temp;
@@ -295,7 +342,8 @@ public class OpenWeatherData {
 	}
 
 	/**
-	 * @param pressure the pressure to set
+	 * @param pressure
+	 *            the pressure to set
 	 */
 	public void setPressure(BigDecimal pressure) {
 		this.pressure = pressure;
@@ -309,7 +357,8 @@ public class OpenWeatherData {
 	}
 
 	/**
-	 * @param humidity the humidity to set
+	 * @param humidity
+	 *            the humidity to set
 	 */
 	public void setHumidity(BigDecimal humidity) {
 		this.humidity = humidity;
@@ -323,7 +372,8 @@ public class OpenWeatherData {
 	}
 
 	/**
-	 * @param tempMin the tempMin to set
+	 * @param tempMin
+	 *            the tempMin to set
 	 */
 	public void setTempMin(BigDecimal tempMin) {
 		this.tempMin = tempMin;
@@ -337,7 +387,8 @@ public class OpenWeatherData {
 	}
 
 	/**
-	 * @param tempMax the tempMax to set
+	 * @param tempMax
+	 *            the tempMax to set
 	 */
 	public void setTempMax(BigDecimal tempMax) {
 		this.tempMax = tempMax;
@@ -351,7 +402,8 @@ public class OpenWeatherData {
 	}
 
 	/**
-	 * @param visibility the visibility to set
+	 * @param visibility
+	 *            the visibility to set
 	 */
 	public void setVisibility(BigDecimal visibility) {
 		this.visibility = visibility;
@@ -365,7 +417,8 @@ public class OpenWeatherData {
 	}
 
 	/**
-	 * @param country the country to set
+	 * @param country
+	 *            the country to set
 	 */
 	public void setCountry(String country) {
 		this.country = country;
@@ -374,7 +427,7 @@ public class OpenWeatherData {
 	/**
 	 * @return the webServiceCallStatus
 	 */
-	public boolean isWebServiceCallSuccess(){
+	public boolean isWebServiceCallSuccess() {
 		return this.webServiceCallStatus;
 	}
 
@@ -386,7 +439,8 @@ public class OpenWeatherData {
 	}
 
 	/**
-	 * @param webServiceCallMessage the webServiceCallMessage to set
+	 * @param webServiceCallMessage
+	 *            the webServiceCallMessage to set
 	 */
 	public void setWebServiceCallMessage(String webServiceCallMessage) {
 		this.webServiceCallMessage = webServiceCallMessage;
@@ -400,7 +454,8 @@ public class OpenWeatherData {
 	}
 
 	/**
-	 * @param windSpeed the windSpeed to set
+	 * @param windSpeed
+	 *            the windSpeed to set
 	 */
 	public void setWindSpeed(Integer windSpeed) {
 		this.windSpeed = windSpeed;
@@ -414,64 +469,74 @@ public class OpenWeatherData {
 	}
 
 	/**
-	 * @param winddirection the winddirection to set
+	 * @param winddirection
+	 *            the winddirection to set
 	 */
 	public void setWinddirection(Integer winddirection) {
 		this.windDirection = winddirection;
 	}
-	
+
 	/**
 	 * end of subObject main
 	 */
 
 	/**
-	 * The following are methods for converting units to something we can display
+	 * The following are methods for converting units to something we can
+	 * display
 	 */
 	/**
 	 * 
 	 * @param tempInKelvin
 	 * @return temp in degrees Cent
 	 */
-	public Integer getTempInDegreesCent(BigDecimal tempInKelvin){
+	public Integer getTempInDegreesCent(BigDecimal tempInKelvin) {
 		Integer degreesInCent = 999;
 		final double zeroInKelvin = -273.15;
-		if (tempInKelvin == null){
+		if (tempInKelvin == null) {
 			return degreesInCent;
-		}else{	
-			degreesInCent =  (int) (tempInKelvin.doubleValue() + zeroInKelvin);
-			return degreesInCent; 
+		} else {
+			degreesInCent = (int) (tempInKelvin.doubleValue() + zeroInKelvin);
+			return degreesInCent;
 		}
 	}
-
 
 	/**
 	 * 
 	 * @param tempInKelvin
 	 * @return temp in degrees Farenheit
 	 */
-	public Integer getTempInDegreesFarenheit(BigDecimal tempInKelvin){
+	public Integer getTempInDegreesFarenheit(BigDecimal tempInKelvin) {
 		Integer tempInDegFar = 999;
-		final double convFactor = 9/5;
+		final double convFactor = 9 / 5;
 		int tempInCent = this.getTempInDegreesCent(tempInKelvin);
-		if (tempInCent < 900){
+		if (tempInCent < 900) {
 			tempInDegFar = (int) ((tempInCent * convFactor) + 32);
 		}
-		
+
 		return tempInDegFar;
 	}
 
-	public String getWindDirText(Integer windDir){
+	public String getWindDirText(Integer windDir) {
 		// handle null condition
-		if (windDir == null) windDir = 0;
-		
-		if (windDir > 327) return "North";
-		if (windDir > 292) return "North West";
-		if (windDir > 249) return "West";
-		if (windDir > 207) return "South West";
-		if (windDir > 157) return "South";
-		if (windDir > 112) return "South East";
-		if (windDir > 67) return "East";
-		if (windDir > 22) return "North East";
+		if (windDir == null)
+			windDir = 0;
+
+		if (windDir > 327)
+			return "North";
+		if (windDir > 292)
+			return "North West";
+		if (windDir > 249)
+			return "West";
+		if (windDir > 207)
+			return "South West";
+		if (windDir > 157)
+			return "South";
+		if (windDir > 112)
+			return "South East";
+		if (windDir > 67)
+			return "East";
+		if (windDir > 22)
+			return "North East";
 		return "North";
 	}
 

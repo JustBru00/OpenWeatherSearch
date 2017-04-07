@@ -4,6 +4,8 @@ package weatherGenie;
  */
 
 
+import javax.mail.Message.RecipientType;
+
 import org.simplejavamail.email.Email;
 import org.simplejavamail.email.EmailBuilder;
 import org.simplejavamail.mailer.Mailer;
@@ -27,6 +29,31 @@ public class SendEmail {
 			    .build();
 
 			//new Mailer().sendMail(email);
+		
+		try{
+			new Mailer("smtp.gmail.com", 465, emailUserId, password, TransportStrategy.SMTP_SSL).sendMail(email);
+			
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+			
+
+			
+	return true;
+	}
+	
+	public static boolean sendEmailHTML(String toEmailName, String toEmailAddress, String subject, String emailHTML){
+		final String emailUserId = "JavaCornerstone17Test";
+		final String password = "doAGoodJob!!";
+		final String fromEmailId = emailUserId + "@gmail.com";
+		
+		Email email = new Email();
+		email.setFromAddress(toEmailName, fromEmailId);
+		email.addRecipient(toEmailName, toEmailAddress, RecipientType.TO);
+		email.setTextHTML(emailHTML);
+		email.setSubject(subject);
+		//new Mailer().sendMail(email);
 		
 		try{
 			new Mailer("smtp.gmail.com", 465, emailUserId, password, TransportStrategy.SMTP_SSL).sendMail(email);

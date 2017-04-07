@@ -20,7 +20,12 @@ public class Tester {
 	
 	public static void main(String[] args) {
 		//checkTempConversion();
-		callWeatherService();
+		//callWeatherService();
+		testWeatherFormatter();
+	}
+	
+	private static void testWeatherFormatter() {
+		System.out.println(getATestWeatherBean().getFormatedWeather());
 	}
 	
 	/**
@@ -74,6 +79,7 @@ public class Tester {
 		// wind speed
 		System.out.println("wind speed: " + weatherData.getWindSpeed());
 		System.out.println("wind dir  : " + weatherData.getWinddirection());
+		System.out.println(weatherData.getFormatedWeather());
 	}
 
 }

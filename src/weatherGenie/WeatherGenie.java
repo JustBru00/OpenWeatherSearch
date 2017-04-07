@@ -10,6 +10,7 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -45,6 +46,9 @@ public class WeatherGenie extends JFrame {
 	private JLabel txtError;
 	private JLabel lblFalse;
 	private JButton btnQuery;
+	private JTextField txtEmail;
+	private JButton btnSend;
+	private OpenWeatherData data;
 
 	/**
 	 * Launch the application.
@@ -66,10 +70,9 @@ public class WeatherGenie extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public WeatherGenie() {
-		// instantiate the bean for data
+	public WeatherGenie() {		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 344);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -178,6 +181,37 @@ public class WeatherGenie extends JFrame {
 		lblFalse.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 11));
 		lblFalse.setBounds(327, 222, 46, 14);
 		contentPane.add(lblFalse);
+		
+		JLabel lblSendToEmail = new JLabel("Send to Email:");
+		lblSendToEmail.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblSendToEmail.setBounds(67, 268, 87, 14);
+		contentPane.add(lblSendToEmail);
+		
+		txtEmail = new JTextField();
+		txtEmail.setBounds(166, 265, 143, 20);
+		contentPane.add(txtEmail);
+		txtEmail.setColumns(10);
+		
+		btnSend = new JButton("Send");
+		btnSend.setEnabled(false);
+		btnSend.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+							
+				String text = txtEmail.getText();
+				if (text.contains("@")) {
+					if (!SendEmail.sendEmailHTML(text, text, "Weather Data for " + data.getLocationName(), data.getHTML())) {
+						JOptionPane.showMessageDialog(null, "Email failed to send!", "Email Failed", JOptionPane.ERROR_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null, "Email Sent!", "Email Success", JOptionPane.INFORMATION_MESSAGE);
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "That is not a valid email address!", "Incorrect Email Address", JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+		});
+		btnSend.setBounds(319, 264, 89, 23);
+		contentPane.add(btnSend);
 		btnQuery.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				queryButton();
@@ -191,8 +225,7 @@ public class WeatherGenie extends JFrame {
 	private void queryButton() {
 		// Clear the display
 		clearAllDataFields();
-
-		OpenWeatherData data;
+		
 
 		// If we have a query in the history
 		if (history.containsKey(searchString.getText())) {
@@ -245,10 +278,13 @@ public class WeatherGenie extends JFrame {
 			txtMinTemp.setText(Integer.toString(data.getTempInDegreesFarenheit(data.getTempMin())));
 			txtWindDir.setText(data.getWindDirText(data.getWinddirection()));
 			txtWindSpeed.setText(Integer.toString(data.getWindSpeed()));
+			
+			btnSend.setEnabled(true);
 
 		} else {
 			// Failed to get proper data. Just display the error message
 			// for the user.
+			btnSend.setEnabled(false);
 			txtError.setText(data.getWebServiceCallMessage());
 		}
 
