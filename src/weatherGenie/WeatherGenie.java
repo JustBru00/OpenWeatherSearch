@@ -94,17 +94,17 @@ public class WeatherGenie extends JFrame {
 				btnQuery.doClick();
 			}
 		});
-		searchString.setBounds(119, 41, 199, 20);
+		searchString.setBounds(119, 41, 254, 20);
 		contentPane.add(searchString);
 		searchString.setColumns(10);
 
-		JButton btnFavorite = new JButton("Favorite");
+		JButton btnFavorite = new JButton("Example Search");
 		btnFavorite.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				searchString.setText(Reference.favoriteQuery);
 			}
 		});
-		btnFavorite.setBounds(238, 72, 81, 23);
+		btnFavorite.setBounds(238, 72, 135, 23);
 		contentPane.add(btnFavorite);
 
 		JLabel lblLocation = new JLabel("Weather for");
