@@ -61,7 +61,8 @@ public class GetWeatherData {
 			for (JsonObject result : results.getValuesAs(JsonObject.class)) {
 				// load the weather 'main' and description. I'll give you the first one
 				weatherData.setSummary(result.getString("main", ""));
-				weatherData.setDescription(result.getString("description"));				
+				weatherData.setDescription(result.getString("description"));	
+				weatherData.setIcon(result.getString("icon"));
 			}
 			
 			// I've got city, get the country

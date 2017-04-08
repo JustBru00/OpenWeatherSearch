@@ -25,7 +25,7 @@ public class Tester {
 	}
 	
 	private static void testWeatherFormatter() {
-		System.out.println(getATestWeatherBean().getFormatedWeather());
+		System.out.println(getATestWeatherBean().getFormattedWeather());
 	}
 	
 	/**
@@ -79,7 +79,7 @@ public class Tester {
 		// wind speed
 		System.out.println("wind speed: " + weatherData.getWindSpeed());
 		System.out.println("wind dir  : " + weatherData.getWinddirection());
-		System.out.println(weatherData.getFormatedWeather());
+		System.out.println(weatherData.getFormattedWeather());
 	}
 
 }

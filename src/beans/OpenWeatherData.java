@@ -60,13 +60,20 @@ public class OpenWeatherData {
 		this.timeCreated = Instant.now();
 	}
 
+	/**
+	 * @author Justin Brubaker
+	 * @return A string with html content for emails.
+	 */
 	public String getHTML() {
-		String html = "<h1><span style=\"color: #000000;\"><strong>Current Weather for: WEATHER_LOCATION, COUNTRY</strong></span></h1><ul><li><span"
-				+ " style=\"color: #000000;\"><strong>Conditions: SUMMARY (DESCRIPTION)</strong></span></li><li><span style=\"color: #000000;\">"
-				+ "<strong>Current Temp(F): CURRENT_TEMP | 24 hour min/max temp(F): MIN_TEMP/MAX_TEMP</strong></span></li><li><span s"
-				+ "tyle=\"color: #000000;\"><strong>Pressure(mb): PRESSURE</strong></span></li><li><span style=\"color: #000000;\"><"
-				+ "strong>Wind: WIND_SPEED mph from the WIND_DIR</strong></span></li></ul><p><span style=\"color: #000000;\">&nbsp;</"
-				+ "span></p><h3><span style=\"color: #000000;\"><em>Data brought to you by the Open Weather Data API</em></span></h3>";
+		String html = "<h2><span style=\"color: #000000;\"><strong>Current Weather for: WEATHER_LOCATION, COUNTRY"
+				+ "</strong></span></h2><p><span style=\"color: #000000;\"><strong><img src=\"http://openweathermap.org"
+				+ "/img/w/ICON_IMAGE.png\" alt=\"\" width=\"50\" height=\"50\" /></strong></span></p><ul><li style=\"text-align: "
+				+ "left;\"><span style=\"color: #000000;\"><strong>Conditions: SUMMARY (DESCRIPTION)</strong></span></li><li style"
+				+ "=\"text-align: left;\"><span style=\"color: #000000;\"><strong>Current Temp(F): CURRENT_TEMP | 24 hour min/max temp("
+				+ "F): MIN_TEMP/MAX_TEMP</strong></span></li><li style=\"text-align: left;\"><span style=\"color: #000000;\"><strong>Pressu"
+				+ "re(mb): PRESSURE</strong></span></li><li style=\"text-align: left;\"><span style=\"color: #000000;\"><strong>Wind: WIND_SPEE"
+				+ "D mph from the WIND_DIR</strong></span>&nbsp;</li></ul><h3><span style=\"color: #000000;\"><em>Data brought to you by the Ope"
+				+ "n Weather Data API</em></span></h3>";
 		
 		html = html.replace("WEATHER_LOCATION", getLocationName());
 		html = html.replace("COUNTRY", getCountry());
@@ -78,11 +85,16 @@ public class OpenWeatherData {
 		html = html.replace("PRESSURE", getPressure().toString());
 		html = html.replace("WIND_SPEED", Integer.toString(getWindSpeed()));
 		html = html.replace("WIND_DIR", getWindDirText(getWinddirection()));
+		html = html.replace("ICON_IMAGE", getIcon()); 
 		
 		return html;
 	}
-
-	public String getFormatedWeather() {
+	
+	/**
+	 * @author Justin Brubaker
+	 * @return The formatted weather for the current data.
+	 */
+	public String getFormattedWeather() {
 		StringBuilder s = new StringBuilder();
 		s.append("** Current Weather for: " + getLocationName() + ", " + getCountry() + " **");
 		s.append("\n");
