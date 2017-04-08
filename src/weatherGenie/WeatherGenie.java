@@ -200,12 +200,12 @@ public class WeatherGenie extends JFrame {
 				String text = txtEmail.getText();
 				if (text.contains("@")) {
 					if (!SendEmail.sendEmailHTML(text, text, "Weather Data for " + data.getLocationName(), data.getHTML())) {
-						JOptionPane.showMessageDialog(null, "Email failed to send!", "Email Failed", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(contentPane, "Email failed to send!", "Email Failed", JOptionPane.ERROR_MESSAGE);
 					} else {
-						JOptionPane.showMessageDialog(null, "Email Sent!", "Email Success", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(contentPane, "Email Sent!", "Email Success", JOptionPane.INFORMATION_MESSAGE);
 					}
 				} else {
-					JOptionPane.showMessageDialog(null, "That is not a valid email address!", "Incorrect Email Address", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(contentPane, "That is not a valid email address!", "Incorrect Email Address", JOptionPane.ERROR_MESSAGE);
 				}
 				
 			}

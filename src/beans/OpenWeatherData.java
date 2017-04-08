@@ -61,9 +61,12 @@ public class OpenWeatherData {
 	}
 
 	public String getHTML() {
-		String html = "<h1><strong>Current Weather for: WEATHER_LOCATION, COUNTRY</strong></h1><ul><li><strong>Conditions: "
-				+ "SUMMARY (DESCRIPTION)</strong></li><li><strong>Current Temp(F): CURRENT_TEMP | 24 hour min/max temp(F): MIN_TEMP/MAX_TEMP</strong></li><li><strong>Pressure(mb): "
-				+ "PRESSURE</strong></li><li><strong>Wind: WIND_SPEED mph from the WIND_DIR</strong></li></ul><p>&nbsp;</p><h3><em>Data brought to you by the Open Weather Data API</em></h3>";
+		String html = "<h1><span style=\"color: #000000;\"><strong>Current Weather for: WEATHER_LOCATION, COUNTRY</strong></span></h1><ul><li><span"
+				+ " style=\"color: #000000;\"><strong>Conditions: SUMMARY (DESCRIPTION)</strong></span></li><li><span style=\"color: #000000;\">"
+				+ "<strong>Current Temp(F): CURRENT_TEMP | 24 hour min/max temp(F): MIN_TEMP/MAX_TEMP</strong></span></li><li><span s"
+				+ "tyle=\"color: #000000;\"><strong>Pressure(mb): PRESSURE</strong></span></li><li><span style=\"color: #000000;\"><"
+				+ "strong>Wind: WIND_SPEED mph from the WIND_DIR</strong></span></li></ul><p><span style=\"color: #000000;\">&nbsp;</"
+				+ "span></p><h3><span style=\"color: #000000;\"><em>Data brought to you by the Open Weather Data API</em></span></h3>";
 		
 		html = html.replace("WEATHER_LOCATION", getLocationName());
 		html = html.replace("COUNTRY", getCountry());
